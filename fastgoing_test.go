@@ -2,6 +2,7 @@ package fastgoing
 
 import (
     "fmt"
+    "os"
     "testing"
 )
 
@@ -17,5 +18,21 @@ func TestCheck(t *testing.T) {
             }
         }
         Check(testCase)
+    }
+}
+
+func TestDefaultEnv_VariableWasSet(t *testing.T) {
+    defer func() { _ = os.Unsetenv("test") }()
+    _ = os.Setenv("test", "test")
+    value := DefaultEnv("test", "fallback")
+    if value != "test" {
+        t.Error("wrong env variable value")
+    }
+}
+
+func TestDefaultEnv_VariableIsMissing(t *testing.T) {
+    value := DefaultEnv("test", "fallback")
+    if value != "fallback" {
+        t.Error("wrong env variable value")
     }
 }
