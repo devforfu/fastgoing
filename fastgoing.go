@@ -40,6 +40,10 @@ type RegexpMap struct {
     Compiled *regexp.Regexp
 }
 
+func MustRegexMap(pattern string) *RegexpMap {
+    return &RegexpMap{Compiled:regexp.MustCompile(pattern)}
+}
+
 // Search matches string against compiled regexp and converts match results
 // into a map of matched group.
 func (r *RegexpMap) Search(value string) map[string]string {
