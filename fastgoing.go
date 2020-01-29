@@ -1,6 +1,10 @@
 package fastgoing
 
-import "os"
+import (
+    "os"
+    "regexp"
+    "strconv"
+)
 
 type OnError func(interface{})
 
@@ -29,4 +33,29 @@ func DefaultEnv(name, fallback string) string {
     } else {
         return value
     }
+}
+
+// RegexpMap converts results of regexp match into a map.
+type RegexpMap struct {
+    compiled *regexp.Regexp
+}
+
+// Search matches string against compiled regexp and converts match results
+// into a map of matched group.
+func (r *RegexpMap) Search(value string) map[string]string {
+    matched := r.compiled.FindStringSubmatch(value)
+    params := make(map[string]string)
+    for i, name := range r.compiled.SubexpNames() {
+        if i > 0 && i <= len(matched) {
+            params[name] = matched[i]
+        }
+    }
+    return params
+}
+
+// MustInt wraps ParseInt function and panics if err is not nil.
+func MustInt(number string) int {
+    n, err := strconv.ParseInt(number, 10, 32)
+    if err != nil { panic(err) }
+    return int(n)
 }
