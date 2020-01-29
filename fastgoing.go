@@ -37,15 +37,15 @@ func DefaultEnv(name, fallback string) string {
 
 // RegexpMap converts results of regexp match into a map.
 type RegexpMap struct {
-    compiled *regexp.Regexp
+    Compiled *regexp.Regexp
 }
 
 // Search matches string against compiled regexp and converts match results
 // into a map of matched group.
 func (r *RegexpMap) Search(value string) map[string]string {
-    matched := r.compiled.FindStringSubmatch(value)
+    matched := r.Compiled.FindStringSubmatch(value)
     params := make(map[string]string)
-    for i, name := range r.compiled.SubexpNames() {
+    for i, name := range r.Compiled.SubexpNames() {
         if i > 0 && i <= len(matched) {
             params[name] = matched[i]
         }
