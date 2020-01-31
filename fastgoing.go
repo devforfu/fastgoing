@@ -4,6 +4,7 @@ import (
     "os"
     "regexp"
     "strconv"
+    "time"
 )
 
 type OnError func(interface{})
@@ -62,4 +63,10 @@ func MustInt(number string) int {
     n, err := strconv.ParseInt(number, 10, 32)
     if err != nil { panic(err) }
     return int(n)
+}
+
+// DateUTC create an instance of time.Time that doesn't contain time part but
+// only date's components. The location is assigned to time.UTC.
+func DateUTC(year, month, day int) time.Time {
+    return time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
 }
