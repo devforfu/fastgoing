@@ -40,7 +40,7 @@ type RegexpMap struct {
     Compiled *regexp.Regexp
 }
 
-func MustRegexMap(pattern string) *RegexpMap {
+func MustRegexpMap(pattern string) *RegexpMap {
     return &RegexpMap{Compiled:regexp.MustCompile(pattern)}
 }
 
