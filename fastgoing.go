@@ -1,9 +1,11 @@
 package fastgoing
 
 import (
+    "encoding/json"
     "os"
     "regexp"
     "strconv"
+    "strings"
     "time"
 )
 
@@ -86,4 +88,23 @@ func Exists(path string) (bool, error) {
     } else {
         return false, err
     }
+}
+
+// Verbose returns configuration as a list of string, one line per property or
+// as an array with a single element.
+func Verbose(object interface{}, splitNewLine bool) (lines []string, err error) {
+    indented, err := json.MarshalIndent(object, "", "\t")
+    if err != nil { return nil, err }
+    if splitNewLine {
+        lines = strings.Split(string(indented), "\n")
+    } else {
+        lines = []string{string(indented)}
+    }
+    return lines, nil
+}
+
+func MustVerboseWithSplit(object interface{}) []string {
+    lines, err := Verbose(object, true)
+    Check(err)
+    return lines
 }
