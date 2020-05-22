@@ -70,3 +70,20 @@ func MustInt(number string) int {
 func DateUTC(year, month, day int) time.Time {
     return time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
 }
+
+// Exists checks if local file exists.
+//
+// There are situations when this function cannot return unambiguous result. If
+// this case, the error should be inspected.
+//
+// Reference:
+//     https://stackoverflow.com/questions/12518876/how-to-check-if-a-file-exists-in-go
+func Exists(path string) (bool, error) {
+    if _, err := os.Stat(path); err == nil {
+        return true, nil
+    } else if os.IsNotExist(err) {
+        return false, nil
+    } else {
+        return false, err
+    }
+}
